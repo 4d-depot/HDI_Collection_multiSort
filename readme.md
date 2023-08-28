@@ -1,5 +1,5 @@
-# HDI_Template_v20
+# HDI_Collection_multiSort
 
-Description (4D v20)
+Sort and synchronise several collections (4D v20 R3)
 
 Find more information on the [blog post](https://blog.4d.com/).
