@@ -167,7 +167,7 @@ ASSERT:C1129($city.equal($Rescity))
 var $myBlob : 4D:C1709.Blob
 CONVERT FROM TEXT:C1011("Hello, World!"; "UTF-8"; $myBlob)
 
-var $col; $col2; $col3 : Collection
+var $col; $col2; $col3; $col4 : Collection
 var $Rescol; $Rescol2 : Collection
 $col:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
 $col2:=[$myBlob; ["a"; "z"]; "a"; 1; {t: "a"; u: "z"}; Time:C179(10000); {c: "a"; v: "z"}; Null:C1517; Current date:C33; False:C215]
@@ -182,13 +182,13 @@ ASSERT:C1129($col.equal($Rescol))
 
 // Test 2 - callback
 $col:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
-$Rescol:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
+$Rescol:=["Strawberry"; "Pear"; "Passion fruit"; "Orange"; "Grape"; "Fig"; "Blackberry"; "Banana"; "Apple"; "Ananas"]
 $col.multiSort(Formula:C1597(String:C10($1.value)>String:C10($1.value2)))
 ASSERT:C1129($col.equal($Rescol))
 
 // Test 2 - callback
 $col:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
-$Rescol:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
+$Rescol:=["Ananas"; "Apple"; "Banana"; "Blackberry"; "Fig"; "Grape"; "Orange"; "Passion fruit"; "Pear"; "Strawberry"]
 $col.multiSort(Formula:C1597(String:C10($1.value)<String:C10($1.value2)))
 ASSERT:C1129($col.equal($Rescol))
 
@@ -200,10 +200,10 @@ $col.multiSort(Formula:C1597(Length:C16(String:C10($1.value.fruit))>Length:C16(S
 ASSERT:C1129($col.equal($Rescol))
 
 // Test 4 - mix + synchro
-$col:=[$myBlob; ["a"; "z"]; "a"; 1; {t: "a"; u: "z"}; Current time:C178; {c: "a"; v: "z"}; Null:C1517; Current date:C33; False:C215]
-$Rescol:=[$myBlob; ["a"; "z"]; "a"; 1; {t: "a"; u: "z"}; Current time:C178; {c: "a"; v: "z"}; Null:C1517; Current date:C33; False:C215]
+$col:=[$myBlob; ["a"; "z"]; "a"; 1; {t: "a"; u: "z"}; Time:C179(10000); {c: "a"; v: "z"}; Null:C1517; Current date:C33; False:C215]
+$Rescol:=[Null:C1517; False:C215; "a"; 1; Time:C179(10000); $myBlob; {t: "a"; u: "z"}; {c: "a"; v: "z"}; ["a"; "z"]; Current date:C33]
 $col2:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
-$Rescol2:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
+$Rescol2:=["Passion fruit"; "Ananas"; "Grape"; "Pear"; "Fig"; "Orange"; "Banana"; "Blackberry"; "Apple"; "Strawberry"]
 
 $col.multiSort([$col2])
 ASSERT:C1129($col.equal($Rescol))
@@ -213,9 +213,9 @@ ASSERT:C1129($col2.equal($Rescol2))
 
 // mark: -erreurLength
 
-$col:=["Orange"; "Apple"; "Grape"]
-$col2:=["Orange"; "Apple"]
-$col.multiSort([$col2])
+//$col:=["Orange"; "Apple"; "Grape"]
+//$col2:=["Orange"; "Apple"]
+//$col.multiSort([$col2])
 
 //SET DATABASE LOCALIZATION("fr")
 //$col:=["Orange"; "Apple"; "Grape"]
@@ -225,34 +225,34 @@ $col.multiSort([$col2])
 
 //mark: -diffSort
 
-// check tri
-//$col:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
-//$col2:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
-//$col.sort(True)
-//$col.multiSort(True)
-//ASSERT($col.equal($col2))
+$col:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
+$col2:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
+$col3:=$col.sort(True:C214)
+$col4:=$col2.multiSort(True:C214)
+ASSERT:C1129($col.equal($col2))
+ASSERT:C1129($col3.equal($col4))
 
-//$col:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
-//$col2:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
-////$col.sort("a")
-//$col.multiSort("a")
-//ASSERT($col.equal($col2))
+$col:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
+$col2:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
+$col3:=$col.sort("a")
+$col4:=$col2.multiSort("a")
+ASSERT:C1129($col.equal($col2))
+ASSERT:C1129($col3.equal($col4))
 
-//$col:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
-//$col2:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
-//$col.sort({a: "a"; b: 1})
-//$col.multiSort({a: "a"; b: 1})
-//ASSERT($col.equal($col2))
+$col:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
+$col2:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
+$col3:=$col.sort({a: "a"; b: 1})
+$col4:=$col2.multiSort({a: "a"; b: 1})
+ASSERT:C1129($col.equal($col2))
+ASSERT:C1129($col3.equal($col4))
 
-//$col:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
-//$col2:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
-////$col.sort(Formula(Length(String($1.value))>Length(String(1.value2))))
-//ASSERT($col.equal($col2))
+$col:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
+$col2:=["Orange"; "Apple"; "Grape"; "Pear"; "Banana"; "Fig"; "Blackberry"; "Passion fruit"; "Strawberry"; "Ananas"]
+$col3:=$col.sort(Formula:C1597(Length:C16(String:C10($1.value))>Length:C16(String:C10(1.value2))))
+$col4:=$col2.multiSort(Formula:C1597(Length:C16(String:C10($1.value))>Length:C16(String:C10(1.value2))))
+ASSERT:C1129($col.equal($col2))
+ASSERT:C1129($col3.equal($col4))
 
-//var $c : Collection
-//$c:=New collection(5; 3; 5; 1; 3; 4; 4; 6; 2; 2)
-////$r:=$c.reduce(Formula($1.accumulator*=$1.value); 1)
-//$r:=$c.reduce("er")
-//$c.sort("er")
+
 
 
